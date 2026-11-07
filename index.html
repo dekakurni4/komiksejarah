@@ -1,0 +1,878 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>E-LKPD & Komik Sejarah SMA: Mencari Dasar Negara (Sidang BPUPKI 1945)</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Crimson+Pro:ital,wght@0,500;0,700;1,400&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f5f2eb;
+            color: #292524;
+        }
+        .serif-title {
+            font-family: 'Crimson Pro', serif;
+        }
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #e7e2d5;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #8c6d46;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #6e5434;
+        }
+        /* Fixed scroll container for proper zooming and scrolling without clipping top */
+        .comic-zoom-container {
+            width: 100%;
+            height: 75vh;
+            overflow: auto;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            background-color: #0c0a09;
+            border-radius: 0.75rem;
+            position: relative;
+            padding: 1rem;
+        }
+        .comic-img {
+            transition: transform 0.15s ease;
+            transform-origin: top center;
+            display: block;
+            max-width: 100%;
+            height: auto;
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col">
+
+    <!-- Top Header Navigation -->
+    <header class="bg-stone-900 text-amber-50 border-b-4 border-amber-700 sticky top-0 z-40 shadow-lg">
+        <div class="max-w-7xl mx-auto px-4 py-3 flex flex-wrap items-center justify-between gap-3">
+            <div class="flex items-center gap-3">
+                <div class="w-10 h-10 rounded-lg bg-amber-700 flex items-center justify-center text-white font-bold text-xl shadow-inner">
+                    <i class="fa-solid fa-landmark"></i>
+                </div>
+                <div>
+                    <div class="flex items-center gap-2">
+                        <span class="text-xs font-bold uppercase tracking-widest bg-amber-800 text-amber-200 px-2 py-0.5 rounded">Sejarah Indonesia SMA • Kelas X / XI</span>
+                        <span class="text-xs text-stone-400 hidden sm:inline">Waktu: 45 Menit</span>
+                    </div>
+                    <h1 class="text-lg sm:text-xl font-bold tracking-tight serif-title text-amber-100">Mencari Dasar Negara (Sidang BPUPKI 1945)</h1>
+                </div>
+            </div>
+
+            <!-- Mode & View Switcher -->
+            <div class="flex items-center gap-2 flex-wrap">
+                <div class="bg-stone-800 p-1 rounded-lg flex border border-stone-700 text-xs sm:text-sm">
+                    <button onclick="setLayoutMode('split')" id="btnModeSplit" class="px-3 py-1.5 rounded-md font-medium bg-amber-700 text-white transition flex items-center gap-1.5">
+                        <i class="fa-solid fa-columns hidden sm:inline"></i> <span class="hidden md:inline">Layar</span> Berdampingan
+                    </button>
+                    <button onclick="setLayoutMode('comic')" id="btnModeComic" class="px-3 py-1.5 rounded-md font-medium text-stone-300 hover:text-white transition flex items-center gap-1.5">
+                        <i class="fa-solid fa-book-open"></i> Baca Komik
+                    </button>
+                    <button onclick="setLayoutMode('lkpd')" id="btnModeLkpd" class="px-3 py-1.5 rounded-md font-medium text-stone-300 hover:text-white transition flex items-center gap-1.5">
+                        <i class="fa-solid fa-file-pen"></i> Isi LKPD
+                    </button>
+                </div>
+
+                <button onclick="openTeacherModal()" class="bg-emerald-700 hover:bg-emerald-600 text-white px-3 py-2 rounded-lg text-xs sm:text-sm font-semibold transition flex items-center gap-1.5 shadow border border-emerald-500">
+                    <i class="fa-solid fa-table"></i>
+                    <span>Database & Penilaian Guru</span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Timeline Banner -->
+    <section class="bg-amber-100/80 border-b border-amber-300/80 py-2.5 px-4">
+        <div class="max-w-7xl mx-auto">
+            <div class="flex items-center justify-between cursor-pointer" onclick="toggleTimeline()">
+                <div class="flex items-center gap-2 text-xs sm:text-sm font-bold text-amber-950">
+                    <i class="fa-solid fa-timeline text-amber-700"></i>
+                    <span>PETA KRONOLOGI PERUMUSAN DASAR NEGARA (1945) — ALUR KOMIK HAL. 1–3</span>
+                </div>
+                <button class="text-xs text-amber-800 hover:underline flex items-center gap-1">
+                    <span id="timelineToggleText">Sembunyikan Peta Waktu</span>
+                    <i id="timelineToggleIcon" class="fa-solid fa-chevron-up"></i>
+                </button>
+            </div>
+
+            <div id="timelineContent" class="mt-3 pb-1 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-2.5 text-xs">
+                <div class="bg-slate-900 text-white p-2.5 rounded-lg border-l-4 border-red-600 shadow-sm">
+                    <div class="font-bold text-amber-300">29 APRIL & 28 MEI 1945</div>
+                    <div class="font-semibold">BPUPKI Dibentuk & Dilantik</div>
+                    <div class="text-stone-300 text-[11px] mt-1">Dokuritsu Junbi Cosakai • Ketua: dr. Radjiman W.</div>
+                </div>
+                <div class="bg-white text-stone-800 p-2.5 rounded-lg border-l-4 border-teal-700 shadow-sm border border-stone-300">
+                    <div class="font-bold text-red-700">29 MEI – 1 JUNI 1945</div>
+                    <div class="font-semibold">Sidang I BPUPKI (Komik Hal. 1)</div>
+                    <div class="text-stone-600 text-[11px] mt-1">Yamin (29/5), Soepomo (31/5), Soekarno (1/6)</div>
+                </div>
+                <div class="bg-slate-900 text-white p-2.5 rounded-lg border-l-4 border-amber-500 shadow-sm">
+                    <div class="font-bold text-amber-300">1 JUNI 1945</div>
+                    <div class="font-semibold">Lahirnya Istilah Pancasila (Hal. 2)</div>
+                    <div class="text-stone-300 text-[11px] mt-1">Pidato Soekarno: 5 Dasar & Perasan Trisila</div>
+                </div>
+                <div class="bg-white text-stone-800 p-2.5 rounded-lg border-l-4 border-teal-700 shadow-sm border border-stone-300">
+                    <div class="font-bold text-teal-800">22 JUNI 1945</div>
+                    <div class="font-semibold">Panitia Sembilan (Komik Hal. 3)</div>
+                    <div class="text-stone-600 text-[11px] mt-1">Menyusun kesepakatan Piagam Jakarta</div>
+                </div>
+                <div class="bg-red-900 text-white p-2.5 rounded-lg border-l-4 border-amber-400 shadow-sm">
+                    <div class="font-bold text-amber-200">18 AGUSTUS 1945</div>
+                    <div class="font-semibold">Kompromi Sidang PPKI (Hal. 3)</div>
+                    <div class="text-red-100 text-[11px] mt-1">Ketuhanan Yang Maha Esa • Persatuan Bangsa</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Main Content Container -->
+    <main class="flex-1 max-w-7xl w-full mx-auto px-3 sm:px-4 py-4">
+        <div id="mainGrid" class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+
+            <!-- LEFT COLUMN: COMIC VIEWER WITH ZOOM & FIT CONTROLS -->
+            <section id="comicContainer" class="lg:col-span-6 bg-stone-900 rounded-2xl p-3 sm:p-4 shadow-xl border-2 border-stone-700 lg:sticky lg:top-20">
+                <!-- Comic Header & Page Controls -->
+                <div class="flex flex-wrap items-center justify-between gap-2 pb-3 mb-3 border-b border-stone-700">
+                    <div class="flex items-center gap-2">
+                        <span class="bg-amber-600 text-white text-xs font-bold px-2.5 py-1 rounded">KOMIK </span>
+                        <h2 id="comicPageTitle" class="text-amber-100 font-bold text-sm sm:text-base">Halaman 1: Sidang Pertama BPUPKI</h2>
+                    </div>
+
+                    <div class="flex items-center gap-1.5">
+                        <button onclick="switchComicPage(1)" id="pageBtn1" class="px-3 py-1 rounded text-xs font-bold bg-amber-500 text-stone-950 transition">Hal. 1</button>
+                        <button onclick="switchComicPage(2)" id="pageBtn2" class="px-3 py-1 rounded text-xs font-bold bg-stone-800 text-stone-300 hover:bg-stone-700 transition">Hal. 2</button>
+                        <button onclick="switchComicPage(3)" id="pageBtn3" class="px-3 py-1 rounded text-xs font-bold bg-stone-800 text-stone-300 hover:bg-stone-700 transition">Hal. 3</button>
+                    </div>
+                </div>
+
+                <!-- ZOOM & FIT TOOLBAR -->
+                <div class="flex items-center justify-between bg-stone-800 px-3 py-2 rounded-lg mb-3 text-xs text-stone-300">
+                    <div class="flex items-center gap-1.5">
+                        <span class="font-semibold text-amber-300">Tampilan Komik:</span>
+                        <button onclick="setFitMode('contain')" id="btnFitContain" class="px-2 py-1 bg-amber-700 text-white rounded font-medium transition" title="Pas ke Layar Penampil">Pas Layar</button>
+                        <button onclick="setFitMode('width')" id="btnFitWidth" class="px-2 py-1 bg-stone-700 hover:bg-stone-600 text-stone-200 rounded font-medium transition" title="Lebar Penuh">Lebar Penuh</button>
+                        <button onclick="setFitMode('original')" id="btnFitOriginal" class="px-2 py-1 bg-stone-700 hover:bg-stone-600 text-stone-200 rounded font-medium transition" title="Ukuran Asli 100%">100%</button>
+                    </div>
+                    <div class="flex items-center gap-1">
+                        <button onclick="zoomComic(-0.25)" class="w-7 h-7 bg-stone-700 hover:bg-stone-600 rounded flex items-center justify-center font-bold text-white transition" title="Perkecil (-)"><i class="fa-solid fa-magnifying-glass-minus"></i></button>
+                        <span id="zoomLevelIndicator" class="px-2 font-mono font-bold text-amber-200">100%</span>
+                        <button onclick="zoomComic(0.25)" class="w-7 h-7 bg-stone-700 hover:bg-stone-600 rounded flex items-center justify-center font-bold text-white transition" title="Perbesar (+)"><i class="fa-solid fa-magnifying-glass-plus"></i></button>
+                    </div>
+                </div>
+
+                <!-- COMIC IMAGE CONTAINER WITH ZOOMABLE IMAGE AND PROPER SCROLL -->
+                <div id="comicScrollArea" class="comic-zoom-container">
+                    <img id="activeComicImg" src="komik halaman 1.jpeg" alt="Komik Sejarah BPUPKI" class="comic-img" onerror="this.onerror=null; this.src='https://placehold.co/800x1130/1c1917/fef3c7?text=Memuat+Gambar+Komik...';">
+                </div>
+
+                <!-- Comic Bottom Navigation -->
+                <div class="mt-3 pt-2 border-t border-stone-700 flex items-center justify-between text-xs text-stone-300">
+                    <button onclick="prevComicPage()" id="btnPrevPage" class="px-3 py-1.5 bg-stone-800 hover:bg-stone-700 rounded font-semibold disabled:opacity-40 transition">
+                        <i class="fa-solid fa-arrow-left mr-1"></i> Halaman Sebelumnya
+                    </button>
+                    <span id="comicFooterIndicator" class="font-medium">Halaman 1 / 3</span>
+                    <button onclick="nextComicPage()" id="btnNextPage" class="px-3 py-1.5 bg-amber-600 hover:bg-amber-500 text-white rounded font-semibold disabled:opacity-40 transition">
+                        Halaman Berikutnya <i class="fa-solid fa-arrow-right ml-1"></i>
+                    </button>
+                </div>
+            </section>
+
+            <!-- RIGHT COLUMN: INTERACTIVE LKPD FORM -->
+            <section id="lkpdContainer" class="lg:col-span-6 space-y-5">
+
+                <!-- Progress & Auto-save Status Bar -->
+                <div class="bg-white rounded-xl p-3.5 shadow border border-stone-200 flex flex-wrap items-center justify-between gap-2">
+                    <div class="flex items-center gap-2.5">
+                        <div class="w-9 h-9 rounded-full bg-amber-100 text-amber-800 flex items-center justify-center font-bold text-sm" id="progressPercentage">0%</div>
+                        <div>
+                            <div class="text-xs font-bold text-stone-800">Progres Pengisian LKPD Siswa</div>
+                            <div class="text-[11px] text-stone-500" id="autosaveStatus">Tersimpan otomatis di peramban</div>
+                        </div>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <button type="button" onclick="fillDemoStudentData()" class="text-xs bg-stone-100 hover:bg-stone-200 text-stone-700 px-2.5 py-1.5 rounded-lg font-medium border border-stone-300 transition" title="Isi contoh jawaban untuk simulasi">
+                            <i class="fa-solid fa-wand-magic-sparkles mr-1 text-amber-600"></i> Contoh Isian
+                        </button>
+                        <button type="button" onclick="resetLkpdForm()" class="text-xs bg-red-50 hover:bg-red-100 text-red-700 px-2.5 py-1.5 rounded-lg font-medium border border-red-200 transition">
+                            <i class="fa-solid fa-rotate-left mr-1"></i> Reset
+                        </button>
+                    </div>
+                </div>
+
+                <!-- IDENTITAS PESERTA DIDIK -->
+                <div class="bg-white rounded-2xl p-5 shadow-md border-t-4 border-amber-700">
+                    <div class="flex items-center justify-between mb-3">
+                        <h2 class="text-base font-bold text-stone-900 flex items-center gap-2">
+                            <i class="fa-solid fa-id-card text-amber-700"></i> IDENTITAS PESERTA DIDIK & KELOMPOK
+                        </h2>
+                        <span class="text-[11px] bg-amber-100 text-amber-900 font-semibold px-2 py-0.5 rounded">Wajib Diisi</span>
+                    </div>
+
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3.5 text-sm">
+                        <div>
+                            <label class="block text-xs font-bold text-stone-700 mb-1">Nama Peserta Didik <span class="text-red-600">*</span></label>
+                            <input type="text" id="studentName" oninput="handleFormInput()" placeholder="Contoh: Nadia Putri Pratama" class="w-full px-3 py-2 rounded-lg border border-stone-300 focus:ring-2 focus:ring-amber-600 focus:outline-none">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold text-stone-700 mb-1">Kelas / No. Presensi <span class="text-red-600">*</span></label>
+                            <input type="text" id="studentClass" oninput="handleFormInput()" placeholder="Contoh: XI-3 / 24" class="w-full px-3 py-2 rounded-lg border border-stone-300 focus:ring-2 focus:ring-amber-600 focus:outline-none">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold text-stone-700 mb-1">Kelompok Diskusi</label>
+                            <input type="text" id="studentGroup" oninput="handleFormInput()" placeholder="Contoh: Kelompok 4 - Panitia Sembilan" class="w-full px-3 py-2 rounded-lg border border-stone-300 focus:ring-2 focus:ring-amber-600 focus:outline-none">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold text-stone-700 mb-1">Tanggal Kegiatan</label>
+                            <input type="date" id="activityDate" oninput="handleFormInput()" class="w-full px-3 py-2 rounded-lg border border-stone-300 focus:ring-2 focus:ring-amber-600 focus:outline-none">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- TUJUAN PEMBELAJARAN -->
+                <div class="bg-amber-50/90 rounded-xl p-4 border border-amber-300 text-xs space-y-2">
+                    <div class="font-bold text-amber-950 flex items-center gap-1.5 text-sm">
+                        <i class="fa-solid fa-bullseye text-amber-700"></i> A. TUJUAN PEMBELAJARAN & C. PETUNJUK PENGERJAAN
+                    </div>
+                    <ul class="list-disc list-inside space-y-1 text-stone-700">
+                        <li><strong>Komparasi Gagasan:</strong> Menganalisis & membandingkan tiga usulan dasar negara oleh M. Yamin (29 Mei 1945), Soepomo (31 Mei 1945), dan Soekarno (1 Juni 1945).</li>
+                        <li><strong>Literasi Sumber:</strong> Membedakan fakta sejarah terverifikasi dari risalah sidang dengan unsur dramatisasi visual/dialog komik.</li>
+                        <li><strong>Refleksi Kebangsaan:</strong> Merefleksikan nilai musyawarah dari Piagam Jakarta (22 Juni 1945) hingga kompromi Sidang PPKI (18 Agustus 1945).</li>
+                    </ul>
+                </div>
+
+                <!-- ==================== AKTIVITAS 1 ==================== -->
+                <div class="bg-white rounded-2xl p-5 shadow-md border border-stone-200 space-y-4">
+                    <div class="flex flex-wrap items-center justify-between gap-2 border-b border-stone-200 pb-3">
+                        <div>
+                            <span class="text-[11px] font-bold uppercase tracking-wider text-amber-800 bg-amber-100 px-2 py-0.5 rounded">Berdasarkan Komik Hal. 1 & 2 • Bobot Maks: 30 Poin</span>
+                            <h3 class="text-base font-bold text-stone-900 mt-1">AKTIVITAS 1: KOMPARASI TIGA GAGASAN DASAR NEGARA</h3>
+                        </div>
+                        <button type="button" onclick="switchComicPage(1)" class="text-xs text-amber-700 hover:underline font-semibold">
+                            <i class="fa-solid fa-eye mr-1"></i> Lihat Komik Hal. 1
+                        </button>
+                    </div>
+
+                    <p class="text-xs text-stone-600 leading-relaxed">
+                        Lengkapilah tabel perbandingan usulan ketiga tokoh di bawah ini berdasarkan komik halaman 1 dan halaman 2!
+                    </p>
+
+                    <!-- Tabel Perbandingan 3 Tokoh -->
+                    <div class="overflow-x-auto border border-stone-300 rounded-xl">
+                        <table class="w-full text-left border-collapse text-xs">
+                            <thead>
+                                <tr class="bg-stone-900 text-amber-50">
+                                    <th class="p-2.5 border-r border-stone-800 w-1/4">Aspek Perbandingan</th>
+                                    <th class="p-2.5 border-r border-stone-800 w-1/4">Muhammad Yamin<br><span class="text-[10px] font-normal text-amber-300">(Komik Hal. 1)</span></th>
+                                    <th class="p-2.5 border-r border-stone-800 w-1/4">Soepomo<br><span class="text-[10px] font-normal text-amber-300">(Komik Hal. 2)</span></th>
+                                    <th class="p-2.5 w-1/4">Soekarno<br><span class="text-[10px] font-normal text-amber-300">(Komik Hal. 2)</span></th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-stone-200">
+                                <tr class="bg-stone-50/70">
+                                    <td class="p-2.5 font-bold text-stone-800 border-r border-stone-200">Tanggal Penyampaian Pidato</td>
+                                    <td class="p-2.5 border-r border-stone-200 text-stone-600 bg-stone-100">
+                                        <strong>29 Mei 1945</strong><br><span class="text-[11px]">(Hari pertama sidang)</span>
+                                    </td>
+                                    <td class="p-2 border-r border-stone-200">
+                                        <input type="text" id="a1_soepomo_tgl" oninput="handleFormInput()" placeholder="Contoh: 31 Mei 1945" class="w-full p-1.5 rounded border border-stone-300 focus:ring-1 focus:ring-amber-600">
+                                    </td>
+                                    <td class="p-2">
+                                        <input type="text" id="a1_soekarno_tgl" oninput="handleFormInput()" placeholder="Contoh: 1 Juni 1945" class="w-full p-1.5 rounded border border-stone-300 focus:ring-1 focus:ring-amber-600">
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="p-2.5 font-bold text-stone-800 border-r border-stone-200">
+                                        Ciri Visual & Atribut Tokoh di Komik
+                                    </td>
+                                    <td class="p-2.5 border-r border-stone-200 text-stone-600 bg-stone-100">
+                                        Setelan jas tiga potong hijau tua berdasi, mengangkat satu tangan menghitung lima jari.
+                                    </td>
+                                    <td class="p-2 border-r border-stone-200">
+                                        <textarea id="a1_soepomo_visual" rows="2" oninput="handleFormInput()" placeholder="Warna jas, kacamata, sikap..." class="w-full p-1.5 rounded border border-stone-300 focus:ring-1 focus:ring-amber-600"></textarea>
+                                    </td>
+                                    <td class="p-2">
+                                        <textarea id="a1_soekarno_visual" rows="2" oninput="handleFormInput()" placeholder="Peci hitam, jas krem/putih..." class="w-full p-1.5 rounded border border-stone-300 focus:ring-1 focus:ring-amber-600"></textarea>
+                                    </td>
+                                </tr>
+                                <tr class="bg-stone-50/70">
+                                    <td class="p-2.5 font-bold text-stone-800 border-r border-stone-200">Rumusan Sila / Asas ke-1 & ke-2</td>
+                                    <td class="p-2 border-r border-stone-200">
+                                        <input type="text" id="a1_yamin_12" oninput="handleFormInput()" placeholder="1. ... & 2. ..." class="w-full p-1.5 rounded border border-stone-300">
+                                    </td>
+                                    <td class="p-2 border-r border-stone-200">
+                                        <input type="text" id="a1_soepomo_12" oninput="handleFormInput()" placeholder="1. ... & 2. ..." class="w-full p-1.5 rounded border border-stone-300">
+                                    </td>
+                                    <td class="p-2">
+                                        <input type="text" id="a1_soekarno_12" oninput="handleFormInput()" placeholder="1. ... & 2. ..." class="w-full p-1.5 rounded border border-stone-300">
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="p-2.5 font-bold text-stone-800 border-r border-stone-200">Rumusan Sila / Asas ke-3 & ke-4</td>
+                                    <td class="p-2 border-r border-stone-200">
+                                        <input type="text" id="a1_yamin_34" oninput="handleFormInput()" placeholder="3. ... & 4. ..." class="w-full p-1.5 rounded border border-stone-300">
+                                    </td>
+                                    <td class="p-2 border-r border-stone-200">
+                                        <input type="text" id="a1_soepomo_34" oninput="handleFormInput()" placeholder="3. ... & 4. ..." class="w-full p-1.5 rounded border border-stone-300">
+                                    </td>
+                                    <td class="p-2">
+                                        <input type="text" id="a1_soekarno_34" oninput="handleFormInput()" placeholder="3. ... & 4. ..." class="w-full p-1.5 rounded border border-stone-300">
+                                    </td>
+                                </tr>
+                                <tr class="bg-stone-50/70">
+                                    <td class="p-2.5 font-bold text-stone-800 border-r border-stone-200">Rumusan Sila / Asas ke-5</td>
+                                    <td class="p-2 border-r border-stone-200">
+                                        <input type="text" id="a1_yamin_5" oninput="handleFormInput()" placeholder="5. ..." class="w-full p-1.5 rounded border border-stone-300">
+                                    </td>
+                                    <td class="p-2 border-r border-stone-200">
+                                        <input type="text" id="a1_soepomo_5" oninput="handleFormInput()" placeholder="5. ..." class="w-full p-1.5 rounded border border-stone-300">
+                                    </td>
+                                    <td class="p-2">
+                                        <input type="text" id="a1_soekarno_5" oninput="handleFormInput()" placeholder="5. ..." class="w-full p-1.5 rounded border border-stone-300">
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="p-2.5 font-bold text-stone-800 border-r border-stone-200">Penamaan Khusus & Pemerasan Gagasan</td>
+                                    <td class="p-2.5 border-r border-stone-200 text-stone-600 bg-stone-100">Lima asas dasar negara.</td>
+                                    <td class="p-2.5 border-r border-stone-200 text-stone-600 bg-stone-100">Lima dasar negara merdeka.</td>
+                                    <td class="p-2">
+                                        <input type="text" id="a1_soekarno_nama" oninput="handleFormInput()" placeholder="Nama: Pancasila | Trisila..." class="w-full p-1.5 rounded border border-stone-300">
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <!-- Analisis 1.1 & 1.2 -->
+                    <div class="space-y-3 pt-2">
+                        <div>
+                            <label class="block text-xs font-bold text-stone-800 mb-1">Pertanyaan Analisis 1.1: Titik Temu Ketiga Gagasan</label>
+                            <textarea id="a1_analisis_1" rows="2" oninput="handleFormInput()" placeholder="Jelaskan persamaan dan nilai utama yang sama-sama muncul..." class="w-full p-2.5 text-xs rounded-lg border border-stone-300 focus:ring-2 focus:ring-amber-600 focus:outline-none"></textarea>
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold text-stone-800 mb-1">Pertanyaan Analisis 1.2: Penamaan "Pancasila" & Konsep "Trisila"</label>
+                            <textarea id="a1_analisis_2" rows="2" oninput="handleFormInput()" placeholder="Mengapa dinamakan Pancasila dan bagaimana konsep Trisila..." class="w-full p-2.5 text-xs rounded-lg border border-stone-300 focus:ring-2 focus:ring-amber-600 focus:outline-none"></textarea>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ==================== AKTIVITAS 2 ==================== -->
+                <div class="bg-white rounded-2xl p-5 shadow-md border border-stone-200 space-y-4">
+                    <div class="border-b border-stone-200 pb-3">
+                        <span class="text-[11px] font-bold uppercase tracking-wider text-teal-800 bg-teal-100 px-2 py-0.5 rounded">Berpikir Kritis Sejarawan • Bobot Maks: 25 Poin</span>
+                        <h3 class="text-base font-bold text-stone-900 mt-1">AKTIVITAS 2: LITERASI SUMBER SEJARAH (FAKTA VS. DRAMATISASI)</h3>
+                    </div>
+                    <div id="aktivitas2List" class="space-y-3">
+                        <!-- Populated by JS -->
+                    </div>
+                </div>
+
+                <!-- ==================== AKTIVITAS 3 ==================== -->
+                <div class="bg-white rounded-2xl p-5 shadow-md border border-stone-200 space-y-4">
+                    <div class="flex flex-wrap items-center justify-between gap-2 border-b border-stone-200 pb-3">
+                        <div>
+                            <span class="text-[11px] font-bold uppercase tracking-wider text-amber-800 bg-amber-100 px-2 py-0.5 rounded">Berdasarkan Komik Hal. 3 • Bobot Maks: 25 Poin</span>
+                            <h3 class="text-base font-bold text-stone-900 mt-1">AKTIVITAS 3: PIAGAM JAKARTA & KOMPROMI 18 AGUSTUS 1945</h3>
+                        </div>
+                        <button type="button" onclick="switchComicPage(3)" class="text-xs text-amber-700 hover:underline font-semibold">
+                            <i class="fa-solid fa-eye mr-1"></i> Lihat Komik Hal. 3
+                        </button>
+                    </div>
+
+                    <div class="space-y-3">
+                        <div>
+                            <label class="block text-xs font-bold text-stone-800 mb-1">3.1 (Bagian 1): 9 Tokoh Anggota Panitia Sembilan (22 Juni 1945)</label>
+                            <textarea id="a3_panitia9" rows="2" oninput="handleFormInput()" placeholder="Sebutkan 9 tokoh anggota Panitia Sembilan..." class="w-full p-2.5 text-xs rounded-lg border border-stone-300 focus:ring-2 focus:ring-amber-600 focus:outline-none"></textarea>
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold text-stone-800 mb-1">3.1 (Bagian 2): Perubahan Sila Pertama Piagam Jakarta (18 Agustus 1945)</label>
+                            <textarea id="a3_perubahan_sila1" rows="2" oninput="handleFormInput()" placeholder="Bagaimana bunyi awal dan perubahannya serta alasan kompromi..." class="w-full p-2.5 text-xs rounded-lg border border-stone-300 focus:ring-2 focus:ring-amber-600 focus:outline-none"></textarea>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ==================== AKTIVITAS 4 ==================== -->
+                <div class="bg-white rounded-2xl p-5 shadow-md border border-stone-200 space-y-4">
+                    <div class="border-b border-stone-200 pb-3">
+                        <span class="text-[11px] font-bold uppercase tracking-wider text-red-800 bg-red-100 px-2 py-0.5 rounded">Berdasarkan Komik Hal. 3 Panel 5 • Bobot Maks: 20 Poin</span>
+                        <h3 class="text-base font-bold text-stone-900 mt-1">AKTIVITAS 4: REFLEKSI KRITIS & RELEVANSI MASA KINI</h3>
+                    </div>
+
+                    <div>
+                        <p class="text-xs text-stone-700 mb-2 leading-relaxed">
+                            Tulislah <strong>satu paragraf refleksi (5–7 kalimat)</strong> yang menghubungkan musyawarah para pendiri bangsa 1945 dengan kehidupan di sekolah atau masyarakat majemuk saat ini!
+                        </p>
+                        <textarea id="a4_refleksi" rows="4" oninput="handleFormInput()" placeholder="Tuliskan paragraf refleksi kritis Anda di sini (5-7 kalimat)..." class="w-full p-3 text-xs rounded-lg border border-stone-300 focus:ring-2 focus:ring-amber-600 focus:outline-none"></textarea>
+                        <div class="flex justify-between items-center mt-1 text-[11px] text-stone-500">
+                            <span id="sentenceCounter">Jumlah kalimat terdeteksi: 0 kalimat</span>
+                            <span>Target: 5–7 kalimat</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- SUBMIT BUTTON -->
+                <div class="bg-white rounded-2xl p-5 shadow-lg border-2 border-emerald-600 flex flex-col sm:flex-row items-center justify-between gap-4">
+                    <div>
+                        <h4 class="font-bold text-stone-900 text-sm">Siap Mengumpulkan LKPD?</h4>
+                        <p class="text-xs text-stone-600">Jawaban akan dikirim ke Google Sheet Guru untuk dinilai sesuai Rubrik Bagian D.</p>
+                    </div>
+                    <button type="button" id="btnSubmitLkpd" onclick="submitToGoogleSheet()" class="w-full sm:w-auto px-6 py-3 bg-emerald-700 hover:bg-emerald-600 text-white font-bold rounded-xl shadow-md transition flex items-center justify-center gap-2 text-sm shrink-0">
+                        <i class="fa-solid fa-paper-plane"></i>
+                        <span>Kirim Jawaban ke Google Sheet</span>
+                    </button>
+                </div>
+
+            </section>
+        </div>
+    </main>
+
+    <!-- ==================== MODAL DATABASE & PENILAIAN GURU ==================== -->
+    <div id="teacherModal" class="fixed inset-0 bg-black/70 z-50 hidden flex items-center justify-center p-3 sm:p-4">
+        <div class="bg-white rounded-2xl max-w-4xl w-full max-h-[90vh] flex flex-col shadow-2xl overflow-hidden border border-stone-300">
+            <div class="bg-stone-900 text-white px-5 py-4 flex items-center justify-between">
+                <div class="flex items-center gap-2.5">
+                    <i class="fa-solid fa-table-list text-emerald-400 text-xl"></i>
+                    <div>
+                        <h3 class="font-bold text-base">Panel Guru: Integrasi Google Sheets & Rubrik Penilaian (Bagian D)</h3>
+                        <p class="text-xs text-stone-400">Hubungkan URL Google Apps Script dan nilai tugas siswa langsung.</p>
+                    </div>
+                </div>
+                <button onclick="closeTeacherModal()" class="text-stone-400 hover:text-white text-lg px-2"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+
+            <div class="bg-stone-100 px-5 pt-2 border-b border-stone-300 flex gap-2 text-xs font-bold">
+                <button onclick="switchTeacherTab('config')" id="tabBtnConfig" class="px-4 py-2.5 border-b-2 border-emerald-700 text-emerald-800 bg-white rounded-t-lg">1. Koneksi Google Sheet & Script</button>
+                <button onclick="switchTeacherTab('submissions')" id="tabBtnSubmissions" class="px-4 py-2.5 border-b-2 border-transparent text-stone-600 hover:text-stone-900">2. Data Siswa & Penilaian Rubrik D (<span id="submissionCountBadge">0</span>)</button>
+            </div>
+
+            <div class="p-5 overflow-y-auto space-y-4 text-xs flex-1">
+                <div id="teacherTabConfig" class="space-y-4">
+                    <div class="bg-emerald-50 border border-emerald-300 rounded-xl p-4">
+                        <label class="block font-bold text-emerald-950 text-sm mb-1">URL Web App Google Apps Script</label>
+                        <p class="text-emerald-800 mb-2">Tempelkan URL Web App Google Apps Script Anda di bawah ini:</p>
+                        <div class="flex flex-col sm:flex-row gap-2">
+                            <input type="url" id="gasUrlInput" placeholder="https://script.google.com/macros/s/.../exec" class="flex-1 px-3 py-2 rounded-lg border border-emerald-400 bg-white">
+                            <button onclick="saveGasUrl()" class="px-4 py-2 bg-emerald-700 hover:bg-emerald-600 text-white font-bold rounded-lg transition shrink-0">Simpan URL</button>
+                        </div>
+                        <div id="gasSavedIndicator" class="text-[11px] text-emerald-700 font-semibold mt-1.5"></div>
+                    </div>
+
+                    <div>
+                        <div class="flex items-center justify-between mb-1.5">
+                            <span class="font-bold text-stone-800">Kode `Code.gs` (Otomatis Membuat Header + Kolom Rubrik D + Rumus Total):</span>
+                            <button onclick="copyAppsScriptCode()" class="px-3 py-1 bg-stone-800 hover:bg-stone-700 text-amber-300 rounded font-semibold">Salin Kode</button>
+                        </div>
+                        <pre id="gasCodeBlock" class="bg-stone-900 text-amber-100 p-3.5 rounded-xl overflow-x-auto text-[11px] leading-relaxed font-mono select-all">function doPost(e) {
+  var lock = LockService.getScriptLock();
+  lock.tryLock(10000);
+  try {
+    var doc = SpreadsheetApp.getActiveSpreadsheet();
+    var sheet = doc.getSheetByName('Data_LKPD_BPUPKI') || doc.insertSheet('Data_LKPD_BPUPKI');
+    if (sheet.getLastRow() === 0) {
+      var headers = [
+        'Waktu', 'Nama Siswa', 'Kelas', 'Kelompok', 'Tanggal',
+        'A1 Soepomo', 'A1 Soekarno', 'A1 Yamin', 'A1 Soepomo Rumusan', 'A1 Soekarno Rumusan',
+        'A1.1 Analisis', 'A1.2 Analisis', 'A2 1', 'A2 2', 'A2 3', 'A2 4', 'A2 5', 'A2 6',
+        'A3 Panitia 9', 'A3 Sila 1', 'A4 Refleksi',
+        '[RUBRIK D1] Komparasi (30)', '[RUBRIK D2] Literasi (25)', '[RUBRIK D3] Kompromi (25)', '[RUBRIK D4] Refleksi (20)',
+        '[TOTAL SKOR AKHIR] (100)', 'Catatan Guru'
+      ];
+      sheet.appendRow(headers);
+      sheet.getRange(1, 1, 1, headers.length).setFontWeight('bold').setBackground('#1c1917').setFontColor('#fef3c7');
+      sheet.setFrozenRows(1);
+    }
+    var data = JSON.parse(e.postData.contents);
+    var nextRow = sheet.getLastRow() + 1;
+    var totalFormula = '=SUM(V' + nextRow + ':Y' + nextRow + ')';
+    sheet.appendRow([
+      new Date(), data.studentName, data.studentClass, data.studentGroup, data.activityDate,
+      data.soepomoMeta, data.soekarnoMeta, data.yaminRumusan, data.soepomoRumusan, data.soekarnoRumusan,
+      data.a1_analisis_1, data.a1_analisis_2, data.a2_1, data.a2_2, data.a2_3, data.a2_4, data.a2_5, data.a2_6,
+      data.a3_panitia9, data.a3_perubahan_sila1, data.a4_refleksi,
+      '', '', '', '', totalFormula, ''
+    ]);
+    return ContentService.createTextOutput(JSON.stringify({ status: 'success' })).setMimeType(ContentService.MimeType.JSON);
+  } catch (err) {
+    return ContentService.createTextOutput(JSON.stringify({ status: 'error', message: err.toString() })).setMimeType(ContentService.MimeType.JSON);
+  } finally { lock.releaseLock(); }
+}</pre>
+                    </div>
+                </div>
+
+                <div id="teacherTabSubmissions" class="hidden space-y-4">
+                    <div class="flex items-center justify-between bg-amber-50 p-3 rounded-xl border border-amber-200">
+                        <div>
+                            <div class="font-bold text-stone-900">Daftar Pengumpulan & Penilaian Rubrik Bagian D</div>
+                            <p class="text-[11px] text-stone-600">Nilai langsung di bawah ini atau unduh ke CSV.</p>
+                        </div>
+                        <button onclick="exportSubmissionsToCSV()" class="px-3.5 py-2 bg-emerald-700 text-white font-bold rounded-lg"><i class="fa-solid fa-file-csv mr-1"></i> Unduh CSV</button>
+                    </div>
+                    <div id="submissionsListContainer" class="space-y-3"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast -->
+    <div id="toastBox" class="fixed bottom-5 right-5 z-50 hidden max-w-sm bg-stone-900 text-white px-4 py-3 rounded-xl shadow-2xl border-l-4 border-amber-500 flex items-center gap-3 text-xs">
+        <i id="toastIcon" class="fa-solid fa-circle-check text-emerald-400 text-lg"></i>
+        <div id="toastMessage" class="font-medium leading-snug">Notifikasi</div>
+    </div>
+
+    <script>
+        const comicImages = {
+            1: 'komik halaman 1.jpeg',
+            2: 'komik halaman 2.jpeg',
+            3: 'komik halaman 3.jpeg'
+        };
+
+        const aktivitas2Items = [
+            { no: 1, text: 'Sidang Pertama BPUPKI berlangsung pada 29 Mei–1 Juni 1945 di Gedung Chuo Sangi In, Pejambon, Jakarta (kini Gedung Pancasila).', hint: 'Perhatikan komik halaman 1.' },
+            { no: 2, text: 'Kalimat dialog di balon kata para tokoh merupakan kutipan kata demi kata (harfiah) dari naskah pidato asli tahun 1945.', hint: 'Perhatikan catatan sejarawan di komik.' },
+            { no: 3, text: 'Muhammad Yamin selalu mengenakan jas tiga potong warna hijau tua dan Soepomo mengenakan jas biru keabu-abuan selama sidang.', hint: 'Perhatikan visual tokoh pada komik.' },
+            { no: 4, text: 'Komik hanya menyebut "seorang kawan ahli bahasa" yang menyarankan nama Pancasila kepada Soekarno tanpa memastikan satu nama tokoh.', hint: 'Perhatikan dialog Soekarno di halaman 2.' },
+            { no: 5, text: 'Bisikan salah seorang anggota sidang di Halaman 1: "Dasar negara... ini pertanyaan yang tidak ringan."', hint: 'Perhatikan dialog antarpeserta sidang.' },
+            { no: 6, text: 'Keputusan Presiden tanggal 1 Juni 2016 menetapkan 1 Juni sebagai Hari Lahir Pancasila dan hari libur nasional.', hint: 'Perhatikan komik halaman 3.' }
+        ];
+
+        let currentComicPage = 1;
+        let currentZoom = 1.0;
+        let currentFitMode = 'contain'; // 'contain', 'width', 'original'
+        let savedGasUrl = '';
+        let sessionSubmissions = [];
+
+        window.onload = function() {
+            document.getElementById('activityDate').value = new Date().toISOString().split('T')[0];
+            renderAktivitas2();
+            updateProgress();
+            renderSubmissionsList();
+            applyImageFit();
+        };
+
+        function switchComicPage(pageNum) {
+            currentComicPage = pageNum;
+            const titles = {
+                1: 'Halaman 1: Sidang Pertama BPUPKI (29 Mei 1945)',
+                2: 'Halaman 2: Usulan Soepomo & Pidato Soekarno (31 Mei – 1 Juni 1945)',
+                3: 'Halaman 3: Piagam Jakarta & Kompromi 18 Agustus 1945'
+            };
+            document.getElementById('comicPageTitle').textContent = titles[pageNum];
+            document.getElementById('comicFooterIndicator').textContent = `Halaman ${pageNum} / 3`;
+            
+            const img = document.getElementById('activeComicImg');
+            img.src = comicImages[pageNum];
+            
+            // Reset zoom when switching pages
+            currentZoom = 1.0;
+            applyImageFit();
+
+            [1, 2, 3].forEach(n => {
+                const btn = document.getElementById(`pageBtn${n}`);
+                if (n === pageNum) {
+                    btn.className = 'px-3 py-1 rounded text-xs font-bold bg-amber-500 text-stone-950 transition';
+                } else {
+                    btn.className = 'px-3 py-1 rounded text-xs font-bold bg-stone-800 text-stone-300 hover:bg-stone-700 transition';
+                }
+            });
+
+            document.getElementById('btnPrevPage').disabled = (pageNum === 1);
+            document.getElementById('btnNextPage').disabled = (pageNum === 3);
+        }
+
+        function prevComicPage() { if (currentComicPage > 1) switchComicPage(currentComicPage - 1); }
+        function nextComicPage() { if (currentComicPage < 3) switchComicPage(currentComicPage + 1); }
+
+        function setFitMode(mode) {
+            currentFitMode = mode;
+            currentZoom = 1.0;
+            
+            ['contain', 'width', 'original'].forEach(m => {
+                const btn = document.getElementById(`btnFit${m.charAt(0).toUpperCase() + m.slice(1)}`);
+                if (m === mode) {
+                    btn.className = 'px-2 py-1 bg-amber-700 text-white rounded font-medium transition';
+                } else {
+                    btn.className = 'px-2 py-1 bg-stone-700 hover:bg-stone-600 text-stone-200 rounded font-medium transition';
+                }
+            });
+            applyImageFit();
+        }
+
+        function zoomComic(delta) {
+            currentZoom = Math.max(0.5, Math.min(3.5, currentZoom + delta));
+            currentFitMode = 'custom';
+            
+            ['contain', 'width', 'original'].forEach(m => {
+                document.getElementById(`btnFit${m.charAt(0).toUpperCase() + m.slice(1)}`).className = 'px-2 py-1 bg-stone-700 hover:bg-stone-600 text-stone-200 rounded font-medium transition';
+            });
+            
+            document.getElementById('zoomLevelIndicator').textContent = `${Math.round(currentZoom * 100)}%`;
+            const img = document.getElementById('activeComicImg');
+            img.style.width = `${Math.round(currentZoom * 100)}%`;
+            img.style.maxHeight = 'none';
+        }
+
+        function applyImageFit() {
+            const img = document.getElementById('activeComicImg');
+            const indicator = document.getElementById('zoomLevelIndicator');
+            
+            if (currentFitMode === 'contain') {
+                img.style.width = 'auto';
+                img.style.height = '100%';
+                img.style.maxHeight = '100%';
+                img.style.maxWidth = '100%';
+                indicator.textContent = 'Pas Layar';
+            } else if (currentFitMode === 'width') {
+                img.style.width = '100%';
+                img.style.height = 'auto';
+                img.style.maxHeight = 'none';
+                img.style.maxWidth = '100%';
+                indicator.textContent = 'Lebar Penuh';
+            } else if (currentFitMode === 'original') {
+                img.style.width = 'auto';
+                img.style.height = 'auto';
+                img.style.maxHeight = 'none';
+                img.style.maxWidth = 'none';
+                indicator.textContent = '100%';
+            }
+        }
+
+        function setLayoutMode(mode) {
+            const comicCol = document.getElementById('comicContainer');
+            const lkpdCol = document.getElementById('lkpdContainer');
+            const btnSplit = document.getElementById('btnModeSplit');
+            const btnComic = document.getElementById('btnModeComic');
+            const btnLkpd = document.getElementById('btnModeLkpd');
+
+            const activeClass = 'px-3 py-1.5 rounded-md font-medium bg-amber-700 text-white transition flex items-center gap-1.5';
+            const inactiveClass = 'px-3 py-1.5 rounded-md font-medium text-stone-300 hover:text-white transition flex items-center gap-1.5';
+
+            btnSplit.className = mode === 'split' ? activeClass : inactiveClass;
+            btnComic.className = mode === 'comic' ? activeClass : inactiveClass;
+            btnLkpd.className = mode === 'lkpd' ? activeClass : inactiveClass;
+
+            if (mode === 'split') {
+                comicCol.className = 'lg:col-span-6 bg-stone-900 rounded-2xl p-3 sm:p-4 shadow-xl border-2 border-stone-700 lg:sticky lg:top-20';
+                lkpdCol.className = 'lg:col-span-6 space-y-5';
+            } else if (mode === 'comic') {
+                comicCol.className = 'lg:col-span-12 max-w-4xl mx-auto w-full bg-stone-900 rounded-2xl p-4 shadow-xl border-2 border-stone-700';
+                lkpdCol.className = 'hidden';
+            } else if (mode === 'lkpd') {
+                comicCol.className = 'hidden';
+                lkpdCol.className = 'lg:col-span-12 max-w-4xl mx-auto w-full space-y-5';
+            }
+        }
+
+        function toggleTimeline() {
+            const content = document.getElementById('timelineContent');
+            const text = document.getElementById('timelineToggleText');
+            const icon = document.getElementById('timelineToggleIcon');
+            if (content.classList.contains('hidden')) {
+                content.classList.remove('hidden');
+                text.textContent = 'Sembunyikan Peta Waktu';
+                icon.className = 'fa-solid fa-chevron-up';
+            } else {
+                content.classList.add('hidden');
+                text.textContent = 'Tampilkan Peta Waktu';
+                icon.className = 'fa-solid fa-chevron-down';
+            }
+        }
+
+        function renderAktivitas2() {
+            const container = document.getElementById('aktivitas2List');
+            container.innerHTML = aktivitas2Items.map(item => `
+                <div class="p-3 rounded-xl bg-stone-50 border border-stone-200 space-y-2">
+                    <div class="flex items-start gap-2">
+                        <span class="w-6 h-6 rounded-full bg-stone-900 text-amber-200 font-bold text-xs flex items-center justify-center shrink-0 mt-0.5">${item.no}</span>
+                        <div class="flex-1">
+                            <p class="text-xs font-semibold text-stone-800 leading-relaxed">${item.text}</p>
+                            <span class="text-[11px] text-stone-500 italic">${item.hint}</span>
+                        </div>
+                    </div>
+                    <div class="grid grid-cols-1 sm:grid-cols-12 gap-2 pt-1 items-center">
+                        <div class="sm:col-span-5 flex gap-2">
+                            <label class="flex-1 flex items-center gap-1.5 bg-white px-2.5 py-1.5 rounded-lg border border-stone-300 cursor-pointer text-xs">
+                                <input type="radio" name="a2_pilihan_${item.no}" value="Fakta Terverifikasi" onchange="handleFormInput()" class="accent-emerald-700">
+                                <span class="font-semibold text-emerald-900">Fakta</span>
+                            </label>
+                            <label class="flex-1 flex items-center gap-1.5 bg-white px-2.5 py-1.5 rounded-lg border border-stone-300 cursor-pointer text-xs">
+                                <input type="radio" name="a2_pilihan_${item.no}" value="Dramatisasi / Visual" onchange="handleFormInput()" class="accent-amber-700">
+                                <span class="font-semibold text-amber-900">Visual</span>
+                            </label>
+                        </div>
+                        <div class="sm:col-span-7">
+                            <input type="text" id="a2_alasan_${item.no}" oninput="handleFormInput()" placeholder="Alasan / bukti dari komik..." class="w-full px-2.5 py-1.5 text-xs rounded-lg border border-stone-300 bg-white">
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function handleFormInput() {
+            updateProgress();
+            updateSentenceCount();
+        }
+
+        function updateSentenceCount() {
+            const text = document.getElementById('a4_refleksi').value.trim();
+            if (!text) {
+                document.getElementById('sentenceCounter').textContent = 'Jumlah kalimat terdeteksi: 0 kalimat';
+                return;
+            }
+            const sentences = text.split(/[.!?]+/).filter(s => s.trim().length > 3);
+            document.getElementById('sentenceCounter').textContent = `Jumlah kalimat terdeteksi: ${sentences.length} kalimat`;
+        }
+
+        function updateProgress() {
+            const requiredIds = ['studentName', 'studentClass', 'a1_soepomo_tgl', 'a1_soekarno_tgl', 'a1_yamin_12', 'a1_soepomo_12', 'a1_soekarno_12', 'a1_analisis_1', 'a3_panitia9', 'a4_refleksi'];
+            let filled = requiredIds.filter(id => document.getElementById(id) && document.getElementById(id).value.trim() !== '').length;
+            const pct = Math.round((filled / requiredIds.length) * 100);
+            document.getElementById('progressPercentage').textContent = `${pct}%`;
+        }
+
+        function collectFormData() {
+            const getRadioVal = (no) => {
+                const checked = document.querySelector(`input[name="a2_pilihan_${no}"]:checked`);
+                return checked ? checked.value : 'Belum dipilih';
+            };
+            return {
+                timestamp: new Date().toLocaleString('id-ID'),
+                studentName: document.getElementById('studentName').value.trim(),
+                studentClass: document.getElementById('studentClass').value.trim(),
+                studentGroup: document.getElementById('studentGroup').value.trim(),
+                activityDate: document.getElementById('activityDate').value,
+                soepomoMeta: document.getElementById('a1_soepomo_tgl').value,
+                soekarnoMeta: document.getElementById('a1_soekarno_tgl').value,
+                yaminRumusan: document.getElementById('a1_yamin_12').value,
+                soepomoRumusan: document.getElementById('a1_soepomo_12').value,
+                soekarnoRumusan: document.getElementById('a1_soekarno_12').value,
+                a1_analisis_1: document.getElementById('a1_analisis_1').value.trim(),
+                a1_analisis_2: document.getElementById('a1_analisis_2').value.trim(),
+                a2_1: `[${getRadioVal(1)}] ${document.getElementById('a2_alasan_1').value.trim()}`,
+                a2_2: `[${getRadioVal(2)}] ${document.getElementById('a2_alasan_2').value.trim()}`,
+                a2_3: `[${getRadioVal(3)}] ${document.getElementById('a2_alasan_3').value.trim()}`,
+                a2_4: `[${getRadioVal(4)}] ${document.getElementById('a2_alasan_4').value.trim()}`,
+                a2_5: `[${getRadioVal(5)}] ${document.getElementById('a2_alasan_5').value.trim()}`,
+                a2_6: `[${getRadioVal(6)}] ${document.getElementById('a2_alasan_6').value.trim()}`,
+                a3_panitia9: document.getElementById('a3_panitia9').value.trim(),
+                a3_perubahan_sila1: document.getElementById('a3_perubahan_sila1').value.trim(),
+                a4_refleksi: document.getElementById('a4_refleksi').value.trim(),
+                scoreD1: '', scoreD2: '', scoreD3: '', scoreD4: '', teacherNote: ''
+            };
+        }
+
+        function fillDemoStudentData() {
+            document.getElementById('studentName').value = 'Bima Arya Pratama';
+            document.getElementById('studentClass').value = 'XI-1 / 08';
+            document.getElementById('studentGroup').value = 'Kelompok 2';
+            document.getElementById('a1_soepomo_tgl').value = '31 Mei 1945';
+            document.getElementById('a1_soekarno_tgl').value = '1 Juni 1945';
+            document.getElementById('a1_yamin_12').value = '1. Peri Kebangsaan, 2. Peri Kemanusiaan';
+            document.getElementById('a1_soepomo_12').value = '1. Persatuan, 2. Kekeluargaan';
+            document.getElementById('a1_soekarno_12').value = '1. Kebangsaan, 2. Internasionalisme';
+            document.getElementById('a1_analisis_1').value = 'Ketiga tokoh sama-sama menekankan persatuan dan dasar ketuhanan.';
+            document.getElementById('a1_analisis_2').value = 'Dinamakan Pancasila atas petunjuk ahli bahasa.';
+            document.getElementById('a3_panitia9').value = 'Soekarno, Moh. Hatta, M. Yamin, dll.';
+            document.getElementById('a3_perubahan_sila1').value = 'Diubah demi menjaga persatuan bangsa.';
+            document.getElementById('a4_refleksi').value = 'Para pendiri bangsa telah memberikan teladan luar biasa bahwa dasar negara dibangun dengan kompromi. Melalui musyawarah, perbedaan dapat diselesaikan dengan baik. Hal ini sangat relevan dengan kehidupan kami di sekolah saat ini yang terdiri dari beragam latar belakang.';
+            handleFormInput();
+            showToast('Contoh isian berhasil dimasukkan!');
+        }
+
+        function resetLkpdForm() {
+            document.querySelectorAll('#lkpdContainer input[type="text"], #lkpdContainer textarea').forEach(el => el.value = '');
+            handleFormInput();
+            showToast('Formulir LKPD dikosongkan.');
+        }
+
+        async function submitToGoogleSheet() {
+            const data = collectFormData();
+            if (!data.studentName || !data.studentClass) {
+                showToast('Lengkapi Nama dan Kelas terlebih dahulu!', true);
+                return;
+            }
+            sessionSubmissions.unshift(data);
+            renderSubmissionsList();
+
+            if (savedGasUrl) {
+                try {
+                    await fetch(savedGasUrl, { method: 'POST', mode: 'no-cors', body: JSON.stringify(data) });
+                    showToast('Terkirim ke Google Sheet Guru!');
+                } catch (err) {
+                    showToast('Tersimpan di panel lokal guru.');
+                }
+            } else {
+                showToast('Berhasil disimpan! Buka Database Guru untuk melihat rekap.');
+            }
+        }
+
+        function openTeacherModal() { document.getElementById('teacherModal').classList.remove('hidden'); renderSubmissionsList(); }
+        function closeTeacherModal() { document.getElementById('teacherModal').classList.add('hidden'); }
+        function switchTeacherTab(tab) {
+            document.getElementById('teacherTabConfig').classList.toggle('hidden', tab !== 'config');
+            document.getElementById('teacherTabSubmissions').classList.toggle('hidden', tab !== 'submissions');
+        }
+        function saveGasUrl() {
+            savedGasUrl = document.getElementById('gasUrlInput').value.trim();
+            document.getElementById('gasSavedIndicator').textContent = 'URL Aktif!';
+            showToast('URL Google Sheet disimpan!');
+        }
+        function copyAppsScriptCode() {
+            navigator.clipboard.writeText(document.getElementById('gasCodeBlock').innerText);
+            showToast('Kode tersalin ke klip!');
+        }
+        function renderSubmissionsList() {
+            document.getElementById('submissionCountBadge').textContent = sessionSubmissions.length;
+            const container = document.getElementById('submissionsListContainer');
+            if (sessionSubmissions.length === 0) {
+                container.innerHTML = '<p class="text-stone-500 text-center py-6">Belum ada pengumpulan.</p>';
+                return;
+            }
+            container.innerHTML = sessionSubmissions.map((sub, idx) => `
+                <div class="bg-stone-50 p-3 rounded-xl border border-stone-300 space-y-2">
+                    <div class="flex justify-between font-bold text-stone-900">
+                        <span>${sub.studentName} (${sub.studentClass})</span>
+                        <span class="text-emerald-700">Skor Total: <span id="total_${idx}">${(Number(sub.scoreD1)||0)+(Number(sub.scoreD2)||0)+(Number(sub.scoreD3)||0)+(Number(sub.scoreD4)||0)}</span>/100</span>
+                    </div>
+                    <div class="grid grid-cols-4 gap-2">
+                        <input type="number" placeholder="D1(30)" value="${sub.scoreD1}" oninput="updateRubric(${idx}, 'scoreD1', this.value)" class="p-1 border rounded text-center">
+                        <input type="number" placeholder="D2(25)" value="${sub.scoreD2}" oninput="updateRubric(${idx}, 'scoreD2', this.value)" class="p-1 border rounded text-center">
+                        <input type="number" placeholder="D3(25)" value="${sub.scoreD3}" oninput="updateRubric(${idx}, 'scoreD3', this.value)" class="p-1 border rounded text-center">
+                        <input type="number" placeholder="D4(20)" value="${sub.scoreD4}" oninput="updateRubric(${idx}, 'scoreD4', this.value)" class="p-1 border rounded text-center">
+                    </div>
+                </div>
+            `).join('');
+        }
+        function updateRubric(idx, field, val) {
+            sessionSubmissions[idx][field] = val;
+            const sub = sessionSubmissions[idx];
+            document.getElementById(`total_${idx}`).textContent = (Number(sub.scoreD1)||0)+(Number(sub.scoreD2)||0)+(Number(sub.scoreD3)||0)+(Number(sub.scoreD4)||0);
+        }
+        function exportSubmissionsToCSV() {
+            if (sessionSubmissions.length === 0) sessionSubmissions.push(collectFormData());
+            let csv = '\uFEFFWaktu,Nama,Kelas,Total Skor\n' + sessionSubmissions.map(s => `"${s.timestamp}","${s.studentName}","${s.studentClass}",${(Number(s.scoreD1)||0)+(Number(s.scoreD2)||0)+(Number(s.scoreD3)||0)+(Number(s.scoreD4)||0)}`).join('\n');
+            const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+            const a = document.createElement('a');
+            a.href = URL.createObjectURL(blob);
+            a.download = 'Rekap_LKPD.csv';
+            a.click();
+            showToast('CSV berhasil diunduh!');
+        }
+        function showToast(msg, warn=false) {
+            const box = document.getElementById('toastBox');
+            document.getElementById('toastMessage').textContent = msg;
+            box.classList.remove('hidden');
+            setTimeout(() => box.classList.add('hidden'), 3500);
+        }
+    </script>
+</body>
+</html>
